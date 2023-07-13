@@ -71,6 +71,7 @@ public class Main {
         if (answer.equals("yes")) {
             newUser1.educationChecker = true;
         }
+        //Changes are made just like this
 
     }
 }
