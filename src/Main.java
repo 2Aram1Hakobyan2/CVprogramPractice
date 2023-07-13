@@ -3,6 +3,15 @@ import java.util.Scanner;
 public class Main {
     static Scanner scanner = new Scanner(System.in);
 
+    /*public static int additionChecker(){
+        String addition;
+        System.out.print("(Yes/No)add more?\n- ");
+        addition = scanner.nextLine();
+        addition = addition.toLowerCase();
+        if(addition.equals("yes")){
+
+        }
+    }*/
     public static int integerInput() {
         int intInput;
         try {
@@ -21,8 +30,6 @@ public class Main {
     }
 
     public static int Checker() {
-        System.out.println("Do you want create a professional CV?");
-        System.out.print("Write Yes or No\n-");
         String decision = scanner.nextLine();
         String checker = decision.toLowerCase();
         if (checker.equals("yes")) {
@@ -42,6 +49,8 @@ public class Main {
     }
 
     public static void main(String[] args) {
+        System.out.println("Do you want create a professional CV?");
+        System.out.print("Write Yes or No\n-");
         String answer;
         Checker();
         System.out.println("First, we should create a personal account for you, to be able to save your CV\nAnd access it anytime.");
@@ -70,8 +79,14 @@ public class Main {
         answer = answer.toLowerCase();
         if (answer.equals("yes")) {
             newUser1.educationChecker = true;
+            newUser1.edPresent();
         }
-        //Changes are made just like this
-
+        System.out.print("(Yes/No)\nDo you have a work Experience : ");
+        answer = scanner.nextLine();
+        answer = answer.toLowerCase();
+        if (answer.equals("yes")) {
+            newUser1.experienceChecker = true;
+            newUser1.ExpPresent();
+        }
     }
 }
