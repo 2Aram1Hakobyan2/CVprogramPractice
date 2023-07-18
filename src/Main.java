@@ -1,17 +1,42 @@
 import java.util.Scanner;
-
-public class Main {
+import  java.io.File;
+import java.io.FileWriter;
+import java.io.FileReader;
+import java.io.IOException;
+public class  Main {
+    public static String filePath="C:\\Users\\ar1ha\\OneDrive\\Desktop\\CVprogramGIT\\userData.txt";
     static Scanner scanner = new Scanner(System.in);
 
-    /*public static int additionChecker(){
-        String addition;
-        System.out.print("(Yes/No)add more?\n- ");
-        addition = scanner.nextLine();
-        addition = addition.toLowerCase();
-        if(addition.equals("yes")){
-
+    /*A method to insert the data in the file
+    I suppose this will be used frequently, so creating a function was viable
+    to reduce the length of the code as much as possible*/
+    public static void fileWriting(String phrase,String inputData) {
+        try {
+            FileWriter dataWrite = new FileWriter(filePath);
+            dataWrite.write(phrase+inputData);
+            dataWrite.close();
+        }catch(IOException e){
+            System.out.println("an Error has occurred!\n(Writing error)");
+            e.printStackTrace();
         }
-    }*/
+    }
+
+    public static void fileReader(){
+        try{
+            File fileReader = new File(filePath);
+            Scanner theReader = new Scanner(fileReader);
+            while(theReader.hasNextLine()){
+                String data = theReader.nextLine();
+                System.out.println(data);
+            }
+            theReader.close();
+        }catch(IOException e){
+            System.out.println("an Error has occurred!\n(Reading error)");
+            e.printStackTrace();
+        }
+    }
+
+
     public static int integerInput() {
         int intInput;
         try {
@@ -49,6 +74,20 @@ public class Main {
     }
 
     public static void main(String[] args) {
+        //Creating a file to store all the info
+        try{
+            File userData = new File(filePath);
+            if(userData.createNewFile()){
+                System.out.println("File has been created:" + userData.getName());
+            }
+            else{
+                System.out.println("File already exists.");
+            }
+        }catch(IOException e){
+            System.out.println("an Error has occurred!");
+            e.printStackTrace();
+        }
+        //The End of the File stuff
         System.out.println("Do you want create a professional CV?");
         System.out.print("Write Yes or No\n-");
         String answer;
@@ -68,7 +107,8 @@ public class Main {
         newUser1.name = scanner.nextLine();
         System.out.print("Surname : ");
         newUser1.surname = scanner.nextLine();
-        newUser1.age = integerInput();
+        int age = integerInput();
+        newUser1.age = String.valueOf(age);
         scanner.nextLine();//To prevent the program from ignoring nextLine() after nextInt()
         System.out.print("Country : ");
         newUser1.country = scanner.nextLine();
@@ -88,5 +128,12 @@ public class Main {
             newUser1.experienceChecker = true;
             newUser1.ExpPresent();
         }
+        //File has been created, information has been inserted. Time to write all of it to a file then display it.
+        fileWriting("Name : ",newUser1.name);
+        fileWriting("Surname : ",newUser1.surname);
+        fileWriting("Age : ",newUser1.age);
+        fileReader();
+        //First of all, understand how all of this works
+        //Secondly, the fileWriting function writes over previous line
     }
 }
