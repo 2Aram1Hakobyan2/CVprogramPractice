@@ -3,17 +3,40 @@ import  java.io.File;
 import java.io.FileWriter;
 import java.io.FileReader;
 import java.io.IOException;
+/*The IOException is simply an exception that is thrown when an I/O error occurs.
+It is also the base class of such exceptions which
+occur while reading or accessing files, directories and streams.*/
 public class  Main {
-    public static String filePath="C:\\Users\\ar1ha\\OneDrive\\Desktop\\CVprogramGIT\\userData.txt";
+    public static String FilePath="C:\\Users\\ar1ha\\OneDrive\\Desktop\\CVprogramGIT";
+    public static String passwordPath = "C:\\Users\\ar1ha\\OneDrive\\Desktop\\CVprogramGIT\\CVprogram3\\Password.txt";
     static Scanner scanner = new Scanner(System.in);
 
     /*A method to insert the data in the file
     I suppose this will be used frequently, so creating a function was viable
     to reduce the length of the code as much as possible*/
-    public static void fileWriting(String phrase,String inputData) {
+
+    public static void fileCreatorChecker(String filePath,String fileName){
+        //Creating a file or checking the existing of it.
+        String createdFile = filePath+"\\"+fileName;
+        System.out.println(createdFile);
+        try{
+            File user = new File(createdFile);
+            if(user.createNewFile()){//The file will be created if and only if file with that name does not exist
+                System.out.println("File has been created:" + user.getName());
+            }
+            else{//Else, the file exists
+                System.out.println("File already exists.");
+            }
+        }catch(IOException e){
+            System.out.println("an Error has occurred!");
+            e.printStackTrace();
+        }
+    }
+
+    public static void fileWriting(String filePath,String inputData) {
         try {
-            FileWriter dataWrite = new FileWriter(filePath);
-            dataWrite.write(phrase+inputData);
+            FileWriter dataWrite = new FileWriter(filePath, true);
+            dataWrite.write(inputData);
             dataWrite.close();
         }catch(IOException e){
             System.out.println("an Error has occurred!\n(Writing error)");
@@ -21,7 +44,7 @@ public class  Main {
         }
     }
 
-    public static void fileReader(){
+    public static void fileReader(String filePath){
         try{
             File fileReader = new File(filePath);
             Scanner theReader = new Scanner(fileReader);
@@ -34,6 +57,29 @@ public class  Main {
             System.out.println("an Error has occurred!\n(Reading error)");
             e.printStackTrace();
         }
+    }
+
+    public static int pWordChecker() {
+        System.out.print("Password : ");
+        String pWordToCheck = scanner.nextLine();
+        try {
+            File fileReader = new File(passwordPath);
+            Scanner theReader = new Scanner(fileReader);
+            while (theReader.hasNextLine()) {
+                String pWord = theReader.nextLine();
+                if (pWordToCheck.equals(pWord)) {
+                    System.out.println("Valid password.\nAccess approved.");
+                } else {
+                    System.out.println("Invalid password!");
+                    return pWordChecker();
+                }
+            }
+            theReader.close();
+        } catch (IOException e) {
+            System.out.println("an Error has occurred!\n(Reading error)");
+            e.printStackTrace();
+        }
+        return 0;
     }
 
 
@@ -74,66 +120,68 @@ public class  Main {
     }
 
     public static void main(String[] args) {
-        //Creating a file to store all the info
-        try{
-            File userData = new File(filePath);
-            if(userData.createNewFile()){
-                System.out.println("File has been created:" + userData.getName());
-            }
-            else{
-                System.out.println("File already exists.");
-            }
-        }catch(IOException e){
-            System.out.println("an Error has occurred!");
-            e.printStackTrace();
-        }
-        //The End of the File stuff
+        fileCreatorChecker(FilePath,"user");
         System.out.println("Do you want create a professional CV?");
         System.out.print("Write Yes or No\n-");
         String answer;
         Checker();
-        System.out.println("First, we should create a personal account for you, to be able to save your CV\nAnd access it anytime.");
+        System.out.println("Account");
         User newUser1 = new User();
-        System.out.print("Create a username, an original one\nUsername : ");
+        System.out.print("Username : ");
         newUser1.username = scanner.nextLine();
-        System.out.println("*To make your password Strong try using symbols and capital letters.");
-        System.out.print("Password : ");
-        String passwordCreation = scanner.nextLine();
-        newUser1.setterPassword(passwordCreation);
-        passwordCreation = null;
-        System.gc();
-        System.out.println("Great Job!\nNow time to fill out all the fields.");
-        System.out.print("Name : ");
-        newUser1.name = scanner.nextLine();
-        System.out.print("Surname : ");
-        newUser1.surname = scanner.nextLine();
-        int age = integerInput();
-        newUser1.age = String.valueOf(age);
-        scanner.nextLine();//To prevent the program from ignoring nextLine() after nextInt()
-        System.out.print("Country : ");
-        newUser1.country = scanner.nextLine();
-        System.out.print("City : ");
-        newUser1.city = scanner.nextLine();
-        System.out.print("(Yes/No)\nDo you have a higher education : ");
-        answer = scanner.nextLine();
-        answer = answer.toLowerCase();
-        if (answer.equals("yes")) {
-            newUser1.educationChecker = true;
-            newUser1.edPresent();
+        String createdFile = FilePath+"\\"+newUser1.username;
+        System.out.println(createdFile);
+        try{
+            File user = new File(createdFile);
+            if(user.createNewFile()){//The file will be created if and only if file with that name does not exist
+                System.out.println("Account has been created:" + user.getName());
+                System.out.println("Create a password");
+                System.out.print("Password : ");
+                String passwordChecker = scanner.nextLine();
+                newUser1.setterPassword(passwordChecker);
+                passwordChecker = null;
+                System.gc();
+                fileWriting(passwordPath,newUser1.getterPassword());
+                System.out.println("Great Job!\nNow time to fill out all the fields.");
+                System.out.print("Name : ");
+                newUser1.name = scanner.nextLine();
+                System.out.print("Surname : ");
+                newUser1.surname = scanner.nextLine();
+                int age = integerInput();
+                newUser1.age = String.valueOf(age);
+                scanner.nextLine();//To prevent the program from ignoring nextLine() after nextInt()
+                System.out.print("Country : ");
+                newUser1.country = scanner.nextLine();
+                System.out.print("City : ");
+                newUser1.city = scanner.nextLine();
+                System.out.print("(Yes/No)\nDo you have a higher education : ");
+                answer = scanner.nextLine();
+                answer = answer.toLowerCase();
+                if (answer.equals("yes")) {
+                    newUser1.educationChecker = true;
+                    newUser1.edPresent();
+                }
+                System.out.print("(Yes/No)\nDo you have a work Experience : ");
+                answer = scanner.nextLine();
+                answer = answer.toLowerCase();
+                if (answer.equals("yes")) {
+                    newUser1.experienceChecker = true;
+                    newUser1.ExpPresent();
+                }
+                fileWriting(createdFile,"Name : "+newUser1.name);
+                fileWriting(createdFile,"Surname : "+newUser1.surname);
+                fileWriting(createdFile,"Age : "+newUser1.age);
+                fileWriting(createdFile,"Country  : " + newUser1.country);
+                fileWriting(createdFile,"City : "+newUser1.city);
+                fileReader(createdFile);
+            }
+            else{//Else, the file exists
+                System.out.println("Account already exists.");
+                pWordChecker();
+            }
+        }catch(IOException e) {
+            System.out.println("an Error has occurred!");
+            e.printStackTrace();
         }
-        System.out.print("(Yes/No)\nDo you have a work Experience : ");
-        answer = scanner.nextLine();
-        answer = answer.toLowerCase();
-        if (answer.equals("yes")) {
-            newUser1.experienceChecker = true;
-            newUser1.ExpPresent();
-        }
-        //File has been created, information has been inserted. Time to write all of it to a file then display it.
-        fileWriting("Name : ",newUser1.name);
-        fileWriting("Surname : ",newUser1.surname);
-        fileWriting("Age : ",newUser1.age);
-        fileReader();
-        //First of all, understand how all of this works
-        //Secondly, the fileWriting function writes over previous line
     }
 }
